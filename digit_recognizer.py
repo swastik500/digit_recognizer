@@ -52,10 +52,13 @@ class DigitRecognizer:
         
         clear_btn = tk.Button(self.root, text="Clear", command=self.clear_canvas)
         clear_btn.grid(row=2, column=2)
+
+        reset_btn = tk.Button(self.root, text="Reset Training", command=self.reset_training)
+        reset_btn.grid(row=2, column=3)
         
         # Prediction label
         self.pred_label = tk.Label(self.root, text="Prediction: None")
-        self.pred_label.grid(row=3, column=0, columnspan=3)
+        self.pred_label.grid(row=3, column=0, columnspan=4)
         
     def paint(self, event):
         # Increase the brush size for better visibility
@@ -119,6 +122,14 @@ class DigitRecognizer:
         else:
             self.pred_label.config(text="Please train the model first!")
             
+    def reset_training(self):
+        if os.path.exists(self.model_file):
+            os.remove(self.model_file)
+        self.model = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
+        self.X_train = []
+        self.y_train = []
+        self.pred_label.config(text="Training data reset successfully!")
+        
     def run(self):
         self.root.mainloop()
 
